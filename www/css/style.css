@@ -90,3 +90,7 @@
         background-color: yellow;
         color: green;
     }
+
+    #time::after{
+        content: "秒";
+    }
