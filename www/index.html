@@ -43,6 +43,14 @@
             $('#btnD').click(function(e) {
                 btnDClick(e);
             });
+
+            $('#btnE').click(function(e) {
+                btnEClick(e);
+            });
+
+            $('#btnF').click(function(e) {
+                btnFClick(e);
+            });
             init();
         });
 
@@ -96,7 +104,7 @@
             ctx.stroke();
         }
         // 時計 clock(時, 分, 秒, 残り時間が短い時に不要な針を隠す)
-        function clock(hour, minute, second, hide) {
+        function clock(hour, minute, second, hide, minute3, minute5, second0) {
             var canvas = $('#mycanvas')[0];
             var ctx = canvas.getContext('2d');
             ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
@@ -106,6 +114,9 @@
             var ds = second / 60;
             var dm = (minute + ds) / 60;
             var dh = (hour % 12 + dm) / 12;
+            var dm = (minute3 + ds) / 60;
+            var dm = (minute5 + ds) / 60;
+            var ds = second0 / 60;
 
             for (var i = 0; i < 60; i++) {
                 var px = getX(cx, i / 60, 0.9);
@@ -131,6 +142,16 @@
                 line(ctx, cx, cy, px, py, 20, 'rgb(255, 100, 162)')
             }
             if ((!hide) || hour > 0 || minute > 0) {
+                var px = getX(cx, dm, 0.6);
+                var py = getY(cy, dm, 0.6);
+                line(ctx, cx, cy, px, py, 15, 'rgb(128, 255, 162)')
+            }
+            if ((!hide) || hour > 0 || minute3 > 0) {
+                var px = getX(cx, dm, 0.6);
+                var py = getY(cy, dm, 0.6);
+                line(ctx, cx, cy, px, py, 15, 'rgb(128, 255, 162)')
+            }
+            if ((!hide) || hour > 0 || minute5 > 0) {
                 var px = getX(cx, dm, 0.6);
                 var py = getY(cy, dm, 0.6);
                 line(ctx, cx, cy, px, py, 15, 'rgb(128, 255, 162)')
@@ -167,6 +188,8 @@
             $('#btnB').prop('disabled', false);
             $('#btnC').prop('disabled', false);
             $('#btnD').prop('disabled', false);
+            $('#btnE').prop('disabled', false);
+            $('#btnF').prop('disabled', false);
 
         }
 
@@ -222,6 +245,28 @@
 
         }
 
+        // ButtonEがクリックされた時の処理
+        function btnEClick(e) {
+            alarm();
+            active = false;
+            period = 60 * parseInt($("#minute3").val()) + parseInt($("#second0").val());
+            $("#time").html("経過時間： 0");
+            $("#remain").html("残り時間： " + period);
+
+
+        }
+
+        // ButtonFがクリックされた時の処理
+        function btnFClick(e) {
+            alarm();
+            active = false;
+            period = 60 * parseInt($("#minute5").val()) + parseInt($("#second0").val());
+            $("#time").html("経過時間： 0");
+            $("#remain").html("残り時間： " + period);
+
+
+        }
+
 
         // 繰り返し実行する処理
         function timer() {
@@ -246,6 +291,9 @@
 
     <div id="minuteStr">〇</div>
     <div id="secondStr">〇</div>
+    <div id="minute3Str">〇</div>
+    <div id="minute5Str">〇</div>
+    <div id="second0Str">〇</div>
 
     <div id="remain">Remaining time</div>
     <div id="time">Time</div>
@@ -253,8 +301,13 @@
     <button id="btnB">Stop</button>
     <button id="btnC">Set</button>
     <button id="btnD">Restart</button>
+    <button id="btnE">３分</button>
+    <button id="btnF">５分</button>
     <input type="number" id="minute" value=0>
     <input type="number" id="second" value=15>
+    <input type="number" id="minute3" value=3>
+    <input type="number" id="minute5" value=5>
+    <input type="number" id="second0" value=0>
 </body>
 
 </html>
